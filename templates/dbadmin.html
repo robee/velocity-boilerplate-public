@@ -1,0 +1,11 @@
+{% extends "base.html" %}
+{% block title %}Velocity Boilerplate - DBAdmin{% end %}
+
+{% block content %}
+  {{args['operation']}} completed!
+  {% for user in args['users'] %}
+          <div>{{user.username}}</div>
+          <div>{{user.email}}</div>
+          <div>.....</div>
+  {% end %}
+{% end %}

@@ -1,0 +1,109 @@
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<title>{% block title %}Velocity Boilerplate{% end %}</title>
+<meta name="description" content="">
+<meta name="author" content="">
+<!-- Le HTML5 shim, for IE6-8 support of HTML elements -->
+<!--[if lt IE 9]>
+      <script src="http://html5shim.googlecode.com/svn/trunk/html5.js"></script>
+    <![endif]-->
+<!-- Le styles -->
+<link href="/static/bootstrap/css/bootstrap.css" rel="stylesheet">
+<link href="/static/bootstrap/css/bootstrap.responsive" rel="stylesheet">
+<link href="/static/css/custom_style.css" rel="stylesheet">
+<link href="/static/css/zocial.css" rel="stylesheet">
+<link href='http://fonts.googleapis.com/css?family=Lobster+Two:400,400italic,700italic,700' rel='stylesheet' type='text/css'>
+<!-- Le fav and touch icons -->
+<link rel="shortcut icon" href="/static/img/favicon.ico">
+<link rel="apple-touch-icon" href="/static/apple-touch-icon.png">
+<link rel="apple-touch-icon" sizes="72x72" href="/static/apple-touch-icon-72x72.png">
+<link rel="apple-touch-icon" sizes="114x114" href="/static/apple-touch-icon-114x114.png">
+
+<!-- Google Analytics -->
+<script type="text/javascript">
+  var _gaq = _gaq || [];
+  _gaq.push(['_setAccount', '{{google_analytics_key}}']);
+  _gaq.push(['_trackPageview']);
+  (function() {
+    var ga = document.createElement('script'); ga.type = 'text/javascript'; ga.async = true;
+    ga.src = ('https:' == document.location.protocol ? 'https://ssl' : 'http://www') + '.google-analytics.com/ga.js';
+    var s = document.getElementsByTagName('script')[0]; s.parentNode.insertBefore(ga, s);
+  })();
+</script>
+<!-- start Mixpanel -->
+<script type="text/javascript">var mpq=[];mpq.push(["init","{{mixpanel_token}}"]);(function(){var b,a,e,d,c;b=document.createElement("script");b.type="text/javascript";b.async=true;b.src=(document.location.protocol==="https:"?"https:":"http:")+"//api.mixpanel.com/site_media/js/api/mixpanel.js";a=document.getElementsByTagName("script")[0];a.parentNode.insertBefore(b,a);e=function(f){return function(){mpq.push([f].concat(Array.prototype.slice.call(arguments,0)))}};d=["init","track","track_links","track_forms","register","register_once","identify","name_tag","set_config"];for(c=0;c<d.length;c++){mpq[d[c]]=e(d[c])}})();
+</script>
+<!-- end Mixpanel -->
+</head>
+
+<body>
+<div class="navbar navbar-fixed-top">
+	<div class="navbar-inner">
+		<div class="container">
+			<a class="btn btn-navbar" data-toggle="collapse" data-target=".nav-collapse">
+			<span class="icon-bar"></span>
+			<span class="icon-bar"></span>
+			<span class="icon-bar"></span>
+			</a>
+			<a class="brand" href="/">Velocity Boilerplate</a>
+			<div class="nav-collapse">
+				<ul class="nav">
+					<li class="{% block home_active %}{%end%}"><a href="/">Home</a></li>
+					<li class="{% block docs_active %}{%end%}"><a href="/readme">Readme</a></li>
+				</ul>
+				<ul class="nav pull-right">
+					 {% if current_user != '' %}
+					<li class="divider-vertical"></li>
+					<li class="dropdown">
+					<a href="#" class="dropdown-toggle" data-toggle="dropdown">{{current_user}} <b class="caret"></b></a>
+					<ul class="dropdown-menu">
+						<li>
+						<a href="/account">Account</a>
+						</li>
+						<li class="divider"></li>
+						<li>
+						<form action="/logout" method="post">
+							 {% raw xsrf_form_html() %} <button class="btn primary center logout" type="submit">Logout</button>
+						</form>
+						</li>
+					</ul>
+					</li>
+					 {% else %}
+					<li class="{% block home_active %}{%end%}"><a href="/login">Login</a></li>
+					 {% end %}
+				</ul>
+			</div>
+		</div>
+	</div>
+</div>
+</div>
+<div class="container">
+<div class="content">
+	 {% block content %}
+	<div class="page-header">
+		<h1>Base Template</h1>
+	</div>
+	 {% end %}
+</div>
+<footer class="footer">
+<p>
+	<a href="https://github.com/robee/velocity-boilerplate" class="zocial github"><span>Fork me on Github</span></a>
+</p>
+<p>
+	 &copy; Velocity Boilerplate 2011
+</p>
+<p>
+	<a href="http://mixpanel.com/f/partner"><img src="http://mixpanel.com/site_media/images/partner/badge_blue.png" alt="Real Time Web Analytics"/></a>
+</p>
+</footer>
+</div>
+<!-- /container -->
+<script src="/static/js/libs/jquery-1.7.1.min.js"></script>
+<script src="/static/js/libs/modernizr-2.0.6.min.js"></script>
+<script src="/static/bootstrap/js/bootstrap.js"></script>
+<script>mpq.name_tag('{{current_user}}');</script>
+</body>
+</html>

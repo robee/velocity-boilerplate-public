@@ -1,0 +1,40 @@
+{% extends "base.html" %} {% block title %}Velocity Boilerplate - Home{% end %} 
+{% block content %}
+<div class="row">
+	<div class="span8 offset1">
+		<form action="/register" class="form-horizontal" method="post">
+			 {% raw xsrf_form_html() %} 
+		    <legend>
+		        <h1>Register</h1>
+			</legend>
+			<fieldset>
+				<!--Error Message-->
+				<div class="input">
+					 {% block error%}<span class=" error">{{message}}</span>{%end%}
+				</div>
+				<div class="control-group">
+					<label class="control-label" for="username">Username</label>
+					<div class="controls">
+						<input type="text" class="input-xlarge" id="username" name="username">
+					</div>
+				</div>
+				<div class="control-group">
+					<label class="control-label" for="password">Password</label>
+					<div class="controls">
+						<input type="password" class="input-xlarge" name="password" id="password">
+					</div>
+				</div>
+				<div class="control-group">
+					<label class="control-label" for="email">Email</label>
+					<div class="controls">
+						<input type="text" class="input-xlarge" name="email" id="email">
+					</div>
+				</div>
+				<div class="form-actions">
+					<button type="submit" class="btn btn-primary">Login</button>
+				</div>
+			</fieldset>
+		</form>
+	</div>
+</div>
+{% end %}

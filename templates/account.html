@@ -1,0 +1,69 @@
+{% extends "base.html" %} {% block title %}Velocity Boilerplate - Home{% end %} {% block content %}
+<div class="row">
+	<div class="span8 offset1">
+		<div class="page-header">
+			<h1>Account</h1>
+		</div>
+	</div>
+</div>
+<div class="row">
+	<div class="span6 offset2">
+		<form action="/update_email" class="form-horizontal" method="post">
+			{% raw xsrf_form_html() %} 
+			<!--Error Message-->
+			<div class="input">
+				 {% block error%}<span class="error">{{message}}</span>{%end%}
+			</div>
+			<fieldset>
+				<legend>
+				<h2>Update Email Address</h2>
+				</legend>
+				<div class="control-group">
+					<label class="control-label" for="current_email">Current Email</label>
+					<div class="controls">
+						<p class="form-p">
+							{{args['email']}}
+						</p>
+					</div>
+				</div>
+				<div class="control-group">
+					<label class="control-label" for="new_email">Current Email</label>
+					<div class="controls">
+						<input type="text" class="input-xlarge" id="new_email" name="new_email">
+					</div>
+				</div>
+				<div class="form-actions">
+					<button type="submit" class="btn btn-primary">Save changes</button>
+				</div>
+			</fieldset>
+		</form>
+		<form action="/password_reset" class="form-horizontal" method="post">
+			{% raw xsrf_form_html() %} 
+			<!--Error Message-->
+			<div class="input">
+				 {% block error%}<span class="error">{{message}}</span>{%end%}
+			</div>
+			<fieldset>
+				<legend>
+				<h2>Reset Password</h2>
+				</legend>
+				<div class="control-group">
+					<label class="control-label" for="old_password">Old Password</label>
+					<div class="controls">
+						<input type="password" class="input-xlarge" name="old_password" id="old_password">
+					</div>
+				</div>
+				<div class="control-group">
+					<label class="control-label" for="new_password">New Password</label>
+					<div class="controls">
+						<input type="text" class="input-xlarge" id="new_password" name="new_password">
+					</div>
+				</div>
+				<div class="form-actions">
+					<button type="submit" class="btn btn-primary">Reset Password</button>
+				</div>
+			</fieldset>
+		</form>
+	</div>
+</div>
+{% end %}

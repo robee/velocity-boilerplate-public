@@ -1,0 +1,141 @@
+supervisor.conf
+
+[unix_http_server]
+file=/tmp/supervisor.sock
+ 
+[supervisorctl]
+serverurl=unix:///tmp/supervisor.sock
+
+[supervisord]
+logfile=/route/to/where/you/want/logs/velocity-supervisord.log
+logfile_maxbytes=50MB
+logfile_backups=10
+loglevel=warn
+pidfile= /route/to/where/you/want/logs/velocity-supervisord.pid
+nodaemon=false
+minfds=1024
+minprocs=200
+user=nobody
+childlogdir=/route/to/where/you/want d/logs
+ 
+[rpcinterface:supervisor]
+supervisor.rpcinterface_factory = supervisor.rpcinterface:make_main_rpcinterface
+ 
+[group:velocity]
+programs=velocity-3001,velocity-3002,velocity-3003
+ 
+[program:velocity-3001]
+command=/route/to/project/velocity-boilerplate/app.py --port=3001
+directory=/route/to/project/velocity-boilerplate
+autorestart=true
+redirect_stderr=true
+stdout_logfile=/route/to/project/logs/velocity-3001.log
+stdout_logfile_maxbytes=500MB
+stdout_logfile_backups=50
+stdout_capture_maxbytes=1MB
+stdout_events_enabled=false
+loglevel=warn
+
+[program:velocity-3002]
+command=/route/to/project/velocity-boilerplate/app.py --port=3002
+directory=/route/to/project/velocity-boilerplate
+autorestart=true
+redirect_stderr=true
+stdout_logfile=/route/to/project/logs/velocity-3002.log
+stdout_logfile_maxbytes=500MB
+stdout_logfile_backups=50
+stdout_capture_maxbytes=1MB
+stdout_events_enabled=false
+loglevel=warn
+
+
+[program:velocity-3003]
+command=/route/to/project/velocity-boilerplate/app.py --port=3003
+directory=/route/to/project/velocity-boilerplate
+autorestart=true
+redirect_stderr=true
+stdout_logfile=/route/to/project/logs/velocity-3003.log
+stdout_logfile_maxbytes=500MB
+stdout_logfile_backups=50
+stdout_capture_maxbytes=1MB
+stdout_events_enabled=false
+loglevel=warn
+
+
+
+nginx.conf
+
+user nginx;
+worker_processes 1;
+
+error_log /var/log/nginx/error.log;
+pid /var/run/nginx.pid;
+
+events {
+    worker_connections 1024;
+    use epoll;
+}
+
+http {
+    # Enumerate all the Tornado servers here
+    upstream frontends {
+        server 127.0.0.1:3001;
+        server 127.0.0.1:3002;
+        server 127.0.0.1:3003;
+    }
+
+    include /etc/nginx/mime.types;
+    default_type application/octet-stream;
+
+    access_log /var/log/nginx/access.log;
+
+    keepalive_timeout 65;
+    proxy_read_timeout 200;
+    sendfile on;
+    tcp_nopush on;
+    tcp_nodelay on;
+    gzip on;
+    gzip_min_length 1000;
+    gzip_proxied any;
+    gzip_types text/plain text/html text/css text/xml
+               application/x-javascript application/xml
+               application/atom+xml text/javascript;
+
+    # Only retry if there was a communication error, not a timeout
+    # on the Tornado server (to avoid propagating "queries of death"
+    # to all frontends)
+    proxy_next_upstream error;
+
+    server {
+        listen 80;
+
+        # Allow file uploads
+        client_max_body_size 50M;
+        
+        # Enable this if you want nginx to handle static files
+        # location ^~ /static/ {
+        #            root /home/ec2-user/velocity-boilerplate/;
+        #            if ($query_string) {
+        #                expires max;
+        #            }
+        #        }
+        #        location = /favicon.ico {
+        #            rewrite (.*) /static/favicon.ico;
+        #        }
+        #        location = /robots.txt {
+        #            rewrite (.*) /static/robots.txt;
+        #        }
+
+        location / {
+            proxy_pass_header Server;
+            proxy_set_header Host $http_host;
+            proxy_redirect false;
+            proxy_set_header X-Real-IP $remote_addr;
+            proxy_set_header X-Scheme $scheme;
+            proxy_pass http://frontends;
+        }
+    }
+}
+
+
+
